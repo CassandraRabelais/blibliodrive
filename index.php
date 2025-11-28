@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-  	rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Page d'acceuil</title>
@@ -13,48 +12,67 @@
 
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-9">
+		<div class="col-md-12">
 			<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-				<form class="form-inline" action="/action_page.php">
-					<input class="form-control mr-sm-2" type="text" placeholder="Rechercher dans le catalogue (saisie du nom de l'auteur)" size="40">
+				<form class="form-inline d-flex gap-2 w-100" action="/action_page.php">
+					<input class="form-control flex-grow-1" type="text" placeholder="Rechercher dans le catalogue (saisir le nom de l'auteur)" style="background-color: #e7f3ff; height: 38px;">
 					<button class="btn btn-success" type="submit">Recherche</button>
 				</form>
 			</nav><br>			
-		</div>
-
-		<div class="col-md-3">
-
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-9">
 			<?php
 				try {
-
-				$dns = 'mysql:host=localhost;dbname=bibliodrive projet';
-				$utilisateur = 'root';
-				$motDePasse = '';
-				$connexion = new PDO($dns, $utilisateur, $motDePasse);
-
+					$dns = 'mysql:host=localhost;dbname=bibliodrive projet';
+					$utilisateur = 'root';
+					$motDePasse = '';
+					$connexion = new PDO($dns, $utilisateur, $motDePasse);
 				} catch (PDOException $e) {
-				echo 'Échec de la connexion : ' . $e->getMessage();
+					echo 'Échec de la connexion : ' . $e->getMessage();
 				}
 			?>
 			<?php
 				$stmt = $connexion->prepare("SELECT titre, photo FROM livre ORDER BY dateajout DESC LIMIT 3");
 				$stmt->execute();
+				$livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			?>
 
-			<h2>Dernières acquisitions</h2>
-			
+			<h2 class="mb-3">Dernières acquisitions</h2>
+			<div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+
+<div class="carousel-inner">
+	<?php foreach ($livres as $index => $livre): ?>
+	<div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
+		<img src="covers/<?php echo htmlspecialchars($livre['photo']); ?>" class="d-block w-100" alt="<?php echo htmlspecialchars($livre['titre']); ?>" style="max-height: 500px; object-fit: contain;">
+	</div>
+	<?php endforeach; ?>
+</div>
+
+<style>
+	.carousel-control-prev-icon,
+	.carousel-control-next-icon {
+		filter: invert(1);
+	}
+</style>
+
+  <!-- Boutons précédent / suivant -->
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 			</div>
 		</div>
 	</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
-		</div>
 
 </body>
 </html>
