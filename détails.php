@@ -12,18 +12,9 @@
 		La bibliothèque de Moulinsart est fermée au public jusqu'à nouvel ordre. Mais il vous est possible de réserver et retirer vos livres via notre service Biblio Drive !
 	</div>
 
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				<nav class="navbar navbar-expand-sm bg-dark navbar-dark py-2">
-					<a class="navbar-brand" href="index.php">Accueil</a>
-					<form class="form-inline d-flex gap-2 w-75 mx-auto" action="Recherche.php" method="get">
-						<input name="author" class="form-control flex-grow-1" type="text" placeholder="Rechercher dans le catalogue (saisir le nom de l'auteur)" style="background-color: #e7f3ff; height: 32px;" value="">
-						<button class="btn btn-success" type="submit">Recherche</button>
-					</form>
-				</nav><br>            
-			</div>
-		</div>
+    <?php
+        require_once 'navbar.php';
+    ?>
 
 		<div class="row">
 			<div class="col-md-9">
@@ -58,6 +49,8 @@
 							<p><strong>Date d'ajout :</strong> <?php echo htmlspecialchars($livre['dateajout']); ?></p>
 							<h5>Description :</h5>
 							<p><?php echo nl2br(htmlspecialchars($livre['detail'])); ?></p>
+							<p class="disponible" >Disponible</p>
+							<p class="indication" >Pour pouvoir vous identifier, vous devez posséder un compte et vous connecter.</p>
 							<a href="Recherche.php<?php echo !empty($searchQuery) ? '?author=' . urlencode($searchQuery) : ''; ?>" class="btn btn-secondary">Retour à la recherche</a>
 						</div>
 					</div>

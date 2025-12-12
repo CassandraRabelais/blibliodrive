@@ -11,19 +11,10 @@
 	<div class="alert alert-info text-center my-3">
 		La bibliothèque de Moulinsart est fermée au public jusqu'à nouvel ordre. Mais il vous est possible de réserver et retirer vos livres via notre service Biblio Drive !
 	</div>
-
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				<nav class="navbar navbar-expand-sm bg-dark navbar-dark py-2">
-					<a class="navbar-brand" href="index.php">Accueil</a>
-					<form class="form-inline d-flex gap-2 w-75 mx-auto" action="Recherche.php" method="get">
-						<input name="author" class="form-control flex-grow-1" type="text" placeholder="Rechercher dans le catalogue (saisir le nom de l'auteur)" style="background-color: #e7f3ff; height: 32px;" value="<?php echo isset($_GET['author']) ? htmlspecialchars(trim($_GET['author'])) : ''; ?>">
-						<button class="btn btn-success" type="submit">Recherche</button>
-					</form>
-				</nav><br>            
-			</div>
-		</div>
+	
+	<?php
+		require_once 'navbar.php';
+	?>
 
 		<div class="row">
 			<div class="col-md-9">
@@ -40,7 +31,7 @@
 								OR LOWER(a.prenom) LIKE LOWER(:s) 
 								OR LOWER(CONCAT(a.prenom, ' ', a.nom)) LIKE LOWER(:s) 
 								OR LOWER(CONCAT(a.nom, ' ', a.prenom)) LIKE LOWER(:s)
-								OR LOWER(l.titre) LIKE LOWER(:s)
+								/*OR LOWER(l.titre) LIKE LOWER(:s)*/
 								ORDER BY l.dateajout DESC";
 						$stmt = $connexion->prepare($sql);
 						$param = '%'.$searchQuery.'%';
@@ -77,8 +68,8 @@
 						</div>
 					<?php endif; ?>
 				<?php else: ?>
-					<div class="alert alert-secondary" role="alert">
-						Veuillez saisir le nom d'un auteur dans la barre de recherche pour afficher les résultats.
+						<div class="alert alert-secondary" role="alert">
+							Veuillez saisir le nom d'un auteur dans la barre de recherche pour afficher les résultats.
 					</div>
 				<?php endif; ?>
 
