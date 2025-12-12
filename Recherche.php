@@ -8,8 +8,13 @@
 	<title>Résultats de recherche</title>
 </head>
 <body>
-
-	<?php require_once 'navbar.php'; ?>
+	<div class="alert alert-info text-center my-3">
+		La bibliothèque de Moulinsart est fermée au public jusqu'à nouvel ordre. Mais il vous est possible de réserver et retirer vos livres via notre service Biblio Drive !
+	</div>
+	
+	<?php
+		require_once 'navbar.php';
+	?>
 
 		<div class="row">
 			<div class="col-md-9">

@@ -20,6 +20,7 @@
 					<input name="author" class="form-control flex-grow-1" type="text" placeholder="Rechercher dans le catalogue (saisir le nom de l'auteur)" style="background-color: #e7f3ff; height: 32px;" value="">
 					<button class="btn btn-success" type="submit">Recherche</button>
 				</form>
+				<a href="panier.php" class="btn btn-outline-primary ms-2">Panier</a>
 			</nav><br>            
 		</div>
 	</div>
