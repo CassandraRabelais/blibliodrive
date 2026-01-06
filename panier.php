@@ -16,7 +16,6 @@
     require_once 'navbar.php';
     require_once 'connexion.php';
     $message = '';
-
     // Handle remove from cart
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove'])) {
         $nolivre = (int) $_POST['nolivre'];
@@ -42,6 +41,7 @@
                 $borrowSql = "INSERT INTO emprunter (mel, nolivre, dateemprunt) VALUES (:mel, :nolivre, CURDATE())";
                 $borrowStmt = $connexion->prepare($borrowSql);
                 $borrowStmt->bindParam(':mel', $userEmail);
+                // Rajouter limite de 5 livres et message d'erreur si dépassé 
                 $borrowStmt->bindParam(':nolivre', $nolivre);
                 if (!$borrowStmt->execute()) {
                     $success = false;
@@ -73,7 +73,9 @@
                 <h1>Votre Panier</h1>
                 <?php echo $message; ?>
                 <?php if (empty($cartBooks)): ?>
-                    <p>Votre panier est vide.</p>
+                    <p>Votre panier est vide.</p>                                                       
+                <option value="1"> <?php if  ($nolivre['disponible'] == 1) { echo "Disponible"; } else { echo "Indisponible"; } ?> </option> 
+            </option>
                 <?php else: ?>
                     <ul class="list-group">
                         <?php foreach ($cartBooks as $book): ?>
