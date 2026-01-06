@@ -7,6 +7,7 @@
     <title></title>
 </head>
 <body>
+	
     <!-- Colonne de connexion à droite -->
 		<div class="col-md-3 d-flex align-items-start justify-content-end">
 			<div class="card w-100" style="max-width: 350px;">

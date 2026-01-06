@@ -22,14 +22,10 @@
 					<button class="btn btn-success" type="submit">Recherche</button>
 				</form>
 				<?php if (!isset($_SESSION['user'])): ?>
-					<a href="inscription.php" class="btn btn-outline-primary ms-2">Inscription</a>
+					<a href="login.php" class="btn btn-outline-primary ms-2">Inscription</a>
 				<?php endif; ?>
 				<?php if (isset($_SESSION['user'])): ?>
 					<span class="navbar-text me-2">Bienvenue, <?php echo htmlspecialchars($_SESSION['user']['prenom'] . ' ' . $_SESSION['user']['nom']); ?></span>
-					<?php if ($_SESSION['user']['profil'] == 'admin'): ?>
-						<a href="admin.php" class="btn btn-outline-warning ms-2">Administration</a>
-						<a href="inscription.php" class="btn btn-outline-info ms-2">Inscription</a>
-					<?php endif; ?>
 					<a href="logout.php" class="btn btn-outline-danger ms-2">Déconnexion</a>
 				<?php endif; ?>
 				<a href="panier.php" class="btn btn-outline-primary ms-2">Panier</a>
