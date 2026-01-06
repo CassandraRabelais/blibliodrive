@@ -59,11 +59,14 @@
 							<h5>Description :</h5>
 							<p><?php echo nl2br(htmlspecialchars($livre['detail'])); ?></p>
 							<p class="disponible" >Disponible</p>
-							<p class="indication" >Pour pouvoir vous identifier, vous devez posséder un compte et vous connecter.</p>
+							<?php if (!isset($_SESSION['user'])): ?>
+								<p class="indication">Pour pouvoir vous identifier, vous devez posséder un compte et vous connecter.</p>
+							<?php endif; ?>
 							<?php if (isset($_SESSION['user'])): ?>
 								<form method="post" style="display: inline;">
 									<button type="submit" name="add_to_cart" class="btn btn-primary">Ajouter au panier</button>
 								</form>
+							<?php endif; ?>
 							<a href="Recherche.php<?php echo !empty($searchQuery) ? '?author=' . urlencode($searchQuery) : ''; ?>" class="btn btn-secondary">Retour à la recherche</a>
 						</div>
 					</div>
