@@ -64,9 +64,6 @@
 								<form method="post" style="display: inline;">
 									<button type="submit" name="add_to_cart" class="btn btn-primary">Ajouter au panier</button>
 								</form>
-							<?php else: ?>
-								<p class="alert alert-warning">Vous devez être connecté pour ajouter au panier.</p>
-							<?php endif; ?>
 							<a href="Recherche.php<?php echo !empty($searchQuery) ? '?author=' . urlencode($searchQuery) : ''; ?>" class="btn btn-secondary">Retour à la recherche</a>
 						</div>
 					</div>
