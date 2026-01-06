@@ -9,8 +9,12 @@
 </head>
 <body>
 	
-    <?php require_once 'navbar.php'; ?>
+    <?php 
+    session_start();
+    require_once 'navbar.php'; 
+    ?>
 
+	<div class="container">
 		<div class="row">
 			<div class="col-md-9">
 				<?php
@@ -29,6 +33,16 @@
 						$stmt->execute();
 						$livre = $stmt->fetch(PDO::FETCH_ASSOC);
 					}
+
+					// Handle add to cart
+					if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart']) && isset($_SESSION['user'])) {
+						if (!isset($_SESSION['cart'])) {
+							$_SESSION['cart'] = [];
+						}
+						if (!in_array($nolivre, $_SESSION['cart'])) {
+							$_SESSION['cart'][] = $nolivre;
+						}
+					}
 				?>
 
 				<?php if ($livre): ?>
@@ -46,6 +60,13 @@
 							<p><?php echo nl2br(htmlspecialchars($livre['detail'])); ?></p>
 							<p class="disponible" >Disponible</p>
 							<p class="indication" >Pour pouvoir vous identifier, vous devez posséder un compte et vous connecter.</p>
+							<?php if (isset($_SESSION['user'])): ?>
+								<form method="post" style="display: inline;">
+									<button type="submit" name="add_to_cart" class="btn btn-primary">Ajouter au panier</button>
+								</form>
+							<?php else: ?>
+								<p class="alert alert-warning">Vous devez être connecté pour ajouter au panier.</p>
+							<?php endif; ?>
 							<a href="Recherche.php<?php echo !empty($searchQuery) ? '?author=' . urlencode($searchQuery) : ''; ?>" class="btn btn-secondary">Retour à la recherche</a>
 						</div>
 					</div>
@@ -60,7 +81,7 @@
 				<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 			</div>
 
-			<?php include 'inscription.php'; ?>
+			<?php include 'login_form.php'; ?>
 		</div>
 	</div>
 

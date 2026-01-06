@@ -10,9 +10,11 @@
 <body>
 	
 	<?php
+		session_start();
 		require_once 'navbar.php';
 	?>
 
+	<div class="container">
 		<div class="row">
 			<div class="col-md-9">
 				<?php
@@ -20,7 +22,7 @@
 					$livres = [];
 					$searchQuery = '';
 					
-					if (isset($_GET['author']) & trim($_GET['author']) !== '') {
+					if (isset($_GET['author']) && trim($_GET['author']) !== '') {
 						$searchQuery = trim($_GET['author']);
 						$sql = "SELECT DISTINCT l.nolivre, l.titre, l.photo, a.nom, a.prenom FROM livre l 
 								JOIN auteur a ON l.noauteur = a.noauteur 
@@ -44,8 +46,14 @@
 					<?php if (!empty($livres)): ?>
 						<ul class="list-group">
 							<?php foreach ($livres as $livre): ?>
-								<li class="list-group-item">
+								<li class="list-group-item d-flex justify-content-between align-items-center">
 									<a href="détails.php?nolivre=<?php echo htmlspecialchars($livre['nolivre'] ?? ''); ?>&author=<?php echo urlencode($searchQuery); ?>" class="text-decoration-none"><?php echo htmlspecialchars($livre['titre']); ?></a>
+									<?php if (isset($_SESSION['user'])): ?>
+										<form method="post" action="détails.php?nolivre=<?php echo htmlspecialchars($livre['nolivre'] ?? ''); ?>&author=<?php echo urlencode($searchQuery); ?>" style="display: inline;">
+											<input type="hidden" name="add_to_cart" value="1">
+											<button type="submit" class="btn btn-sm btn-primary">Ajouter au panier</button>
+										</form>
+									<?php endif; ?>
 								</li>
 							<?php endforeach; ?>
 						</ul>
@@ -64,7 +72,9 @@
 				<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 			</div>
 
-			<?php include 'inscription.php'; ?>
+			<?php include 'login_form.php'; ?>
+		</div>
+	</div>
 
 </body>
 </html>
