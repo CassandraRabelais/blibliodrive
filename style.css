@@ -1,9 +1,21 @@
 .navbar-brand { color: #c089ed  /*Couleur personnalisée pour "Accueil"*/; }
 
-.disponible {color: green; font-weight: bold;}
-.indication {color:#ff0000; font-style: italic;}
+/* Style pour afficher les livres comme disponibles */
+.disponible {
+    color: green; /* Texte vert */
+    font-weight: bold; /* Gras */
+}
 
+/* Style pour les messages d'indication (non-connecté) */
+.indication {
+    color:#ff0000; /* Texte rouge */
+    font-style: italic; /* Italique */
+}
+
+/* Style pour les icônes de contrôle du carousel */
 .carousel-control-prev-icon,
 .carousel-control-next-icon 
-{filter: invert(1);}
+{
+    filter: invert(1); /* Inverser les couleurs pour meilleure visibilité */
+}
 					

@@ -1,8 +1,16 @@
 <?php
+// ======================================
+// PAGE D'AJOUT DE MEMBRE (ADMIN)
+// ======================================
+// Permet aux administrateurs d'ajouter des nouveaux utilisateurs
+// Accessible uniquement aux admins
+
 session_start();
 require_once 'connexion.php';
 
+// Vérifier que l'utilisateur est connecté ET qu'il est admin
 if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
+    // Si pas admin, rediriger vers la page de connexion
     header("Location: login.php");
     exit;
 }
@@ -21,6 +29,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
 
     <div class="container mt-4">
         <h2>Ajouter un nouveau membre</h2>
+        <!-- Formulaire d'ajout de membre -->
         <form method="post">
             <div class="mb-3">
                 <label for="mel" class="form-label">Email:</label>
@@ -49,21 +58,24 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
 
             <div class="mb-3">
                 <label for="profil" class="form-label">Profil:</label>
+                <!-- Sélectionner le type de profil (Client ou Admin) -->
                 <select name="profil" class="form-control" id="profil" required>
                     <option value="client">Client</option>
                     <option value="admin">Admin</option>
                 </select>
             </div>
+            <!-- Boutons d'action -->
             <button type="submit" class="btn btn-primary">Ajouter le membre</button>
             <a href="admin.php" class="btn btn-secondary">Annuler</a>
         </form>
     </div>
     <?php
+    // Vérifier si le formulaire a été soumis
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Préparation de la requête d'insertion
+        // Préparer la requête d'insertion dans la table utilisateur
         $insertStmt = $connexion->prepare("INSERT INTO utilisateur (mel, motdepasse, nom, prenom, adresse, ville, profil) VALUES (:mel, :motdepasse, :nom, :prenom, :adresse, :ville, :profil)");
         
-        // Récupération des valeurs du formulaire
+        // Récupérer les valeurs du formulaire
         $mel = $_POST['mel'];
         $motdepasse = $_POST['motdepasse'];
         $nom = $_POST['nom'];
@@ -72,7 +84,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
         $ville = $_POST['ville'];
         $profil = $_POST['profil'];
         
-        // Liaison des paramètres
+        // Lier les paramètres à la requête préparée
         $insertStmt->bindValue(':mel', $mel);
         $insertStmt->bindValue(':motdepasse', $motdepasse);
         $insertStmt->bindValue(':nom', $nom);
@@ -81,7 +93,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
         $insertStmt->bindValue(':ville', $ville);
         $insertStmt->bindValue(':profil', $profil);
         
-        // Exécution de la requête
+        // Exécuter la requête et afficher un message de confirmation
         if ($insertStmt->execute()) {
             echo "<div class='alert alert-success mt-3'>Membre ajouté avec succès.</div>";
         } else {

@@ -1,13 +1,21 @@
 <?php
+// ======================================
+// PAGE D'AJOUT DE LIVRE (ADMIN)
+// ======================================
+// Permet aux administrateurs d'ajouter des nouveaux livres
+// Accessible uniquement aux admins
+
 session_start();
 require_once 'connexion.php';
 
+// Vérifier que l'utilisateur est connecté ET qu'il est admin
 if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
+    // Si pas admin, rediriger vers la page de connexion
     header("Location: login.php");
     exit;
 }
 
-// Préparation de la requête pour récupérer les auteurs
+// Récupérer la liste des auteurs disponibles dans la base de données
 $stmt = $connexion->prepare("SELECT noauteur, nom, prenom FROM auteur ORDER BY nom, prenom");
 $stmt->execute();
 ?>
@@ -25,9 +33,11 @@ $stmt->execute();
 
     <div class="container mt-4">
         <h2>Ajouter un nouveau livre</h2>
+        <!-- Formulaire d'ajout de livre -->
         <form method="post">
             <div class="mb-3">
                 <label for="noauteur" class="form-label">Auteur:</label>
+                <!-- Liste déroulante des auteurs -->
                 <select name="noauteur" class="form-control" id="noauteur" required>
                     <?php while ($auteur = $stmt->fetch(PDO::FETCH_OBJ)): ?>
                         <option value="<?= $auteur->noauteur ?>"><?= $auteur->prenom . ' ' . $auteur->nom ?></option>
@@ -51,20 +61,22 @@ $stmt->execute();
                 <textarea name="detail" class="form-control" id="detail" rows="3" required></textarea>
             </div>
             <div class="mb-3">
-                <label for="photo" class="form-label">Image (nom du fichier dans covers/):</label>
+                <label for="photo" class="form-label">Image:</label>
                 <input type="text" name="photo" class="form-control" id="photo" required>
             </div>
+            <!-- Boutons d'action -->
             <button type="submit" class="btn btn-primary">Ajouter livre</button>
             <a href="admin.php" class="btn btn-secondary">Annuler</a>
         </form>
     </div>
 
     <?php
+    // Vérifier si le formulaire a été soumis
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Préparation de la requête d'insertion
+        // Préparer la requête d'insertion dans la table livre
         $insertStmt = $connexion->prepare("INSERT INTO livre (noauteur, titre, isbn13, anneeparution, detail, photo, dateajout) VALUES (:noauteur, :titre, :isbn13, :anneeparution, :detail, :photo, CURDATE())");
         
-        // Récupération des valeurs du formulaire
+        // Récupérer les valeurs du formulaire
         $noauteur = (int) $_POST['noauteur'];
         $titre = $_POST['titre'];
         $isbn13 = $_POST['isbn13'];
@@ -72,7 +84,7 @@ $stmt->execute();
         $detail = $_POST['detail'];
         $photo = $_POST['photo'];
         
-        // Liaison des valeurs avec bindValue et spécification des types
+        // Lier les valeurs avec types de données spécifiés
         $insertStmt->bindValue(':noauteur', $noauteur, PDO::PARAM_INT);
         $insertStmt->bindValue(':titre', $titre, PDO::PARAM_STR);
         $insertStmt->bindValue(':isbn13', $isbn13, PDO::PARAM_STR);
@@ -80,10 +92,10 @@ $stmt->execute();
         $insertStmt->bindValue(':detail', $detail, PDO::PARAM_STR);
         $insertStmt->bindValue(':photo', $photo, PDO::PARAM_STR);
         
-        // Exécution de la requête
+        // Exécuter la requête et afficher un message
         if ($insertStmt->execute()) {
             $nb_ligne_affectees = $insertStmt->rowCount();
-            $dernier_numero = $connexion->lastInsertId();
+            $dernier_numero = $connexion->lastInsertId(); // Récupérer le dernier ID auto-généré
             echo "<div class='alert alert-success mt-3'>";
             echo $nb_ligne_affectees . " livre(s) ajouté(s) avec succès.<br>";
             echo "Dernier numéro de livre généré : " . $dernier_numero;

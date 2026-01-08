@@ -9,10 +9,18 @@
 </head>
 <body>
     <?php
+    // ======================================
+    // PAGE D'ADMINISTRATION
+    // ======================================
+    // Accessible uniquement aux administrateurs
+    // Permet de gérer les utilisateurs et les livres
+    
     session_start();
     require_once 'connexion.php';
 
+    // Vérifier que l'utilisateur est connecté ET qu'il est admin
     if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
+        // Si pas admin, rediriger vers la page de connexion
         header("Location: login.php");
         exit;
     }
@@ -23,13 +31,14 @@
     <div class="container mt-4">
         <h1>Panneau d'Administration</h1>
         
-        <!-- Exemple de fonctionnalités admin -->
+        <!-- Options de gestion disponibles pour les admins -->
         <div class="row">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Gérer les utilisateurs</h5>
-                        <p class="card-text">Ajouter, modifier ou supprimer des utilisateurs.</p>
+                        <p class="card-text">Ajouter des utilisateurs.</p>
+                        <!-- Lien vers la page d'ajout de membre -->
                         <a href="ajoutermembre.php" class="btn btn-primary">Ajouter un utilisateur</a>
                     </div>
                 </div>
@@ -38,7 +47,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Gérer les livres</h5>
-                        <p class="card-text">Ajouter, modifier ou supprimer des livres.</p>
+                        <p class="card-text">Ajouter des livres.</p>
                         <a href="ajouteruunlivre.php" class="btn btn-primary">Ajouter un livre</a>
                     </div>
                 </div>

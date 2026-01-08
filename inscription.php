@@ -8,12 +8,20 @@
 </head>
 <body>
     <?php
+    // ======================================
+    // PAGE D'INSCRIPTION UTILISATEUR
+    // ======================================
+    // Permet aux nouveaux utilisateurs de créer un compte
+    // Vérifie que l'email n'existe pas déjà
+    
     session_start();
     require_once 'connexion.php';
 
     $message = '';
 
+    // Vérifier si le formulaire a été soumis
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // Récupérer les données du formulaire
         $mel = $_POST['mel'];
         $motdepasse = $_POST['motdepasse'];
         $nom = $_POST['nom'];
@@ -22,32 +30,36 @@
         $ville = $_POST['ville'];
         $codepostal = $_POST['codepostal'];
 
-        // Check if email already exists
+        // Vérifier si l'email est déjà utilisé
         $stmt = $connexion->prepare("SELECT mel FROM utilisateur WHERE mel = ?");
         $stmt->execute([$mel]);
         if ($stmt->fetch()) {
+            // Email déjà existant
             $message = "Cet email est déjà utilisé.";
         } else {
+            // Insérer le nouvel utilisateur avec profil 'client'
             $stmt = $connexion->prepare("INSERT INTO utilisateur (mel, motdepasse, nom, prenom, adresse, ville, codepostal, profil) VALUES (?, ?, ?, ?, ?, ?, ?, 'client')");
             if ($stmt->execute([$mel, $motdepasse, $nom, $prenom, $adresse, $ville, $codepostal])) {
+                // Inscription réussie
                 $message = "Inscription réussie. Vous pouvez maintenant vous connecter.";
-                // Optionally redirect to login
-                // header('Location: login.php');
             } else {
+                // Erreur lors de l'insertion
                 $message = "Erreur lors de l'inscription.";
             }
         }
     }
     ?>
 
-    <!-- Colonne d'inscription à droite -->
+	    <!-- Colonne d'inscription à droite -->
 		<div class="col-md-3 d-flex align-items-start justify-content-end">
 			<div class="card w-100" style="max-width: 350px;">
 				<div class="card-body">
 					<h5 class="card-title">Inscription</h5>
+					<!-- Afficher les messages (succès ou erreur) -->
 					<?php if ($message): ?>
 						<div class="alert alert-info"><?php echo $message; ?></div>
 					<?php endif; ?>
+					<!-- Formulaire d'inscription -->
 					<form method="post" action="inscription.php">
 						<div class="mb-3">
 							<label for="mel" class="form-label">Email</label>
