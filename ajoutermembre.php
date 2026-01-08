@@ -57,6 +57,10 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
             </div>
 
             <div class="mb-3">
+                <label for="codepostal" class="form-label">Code postal:</label>
+                <input type="text" name="codepostal" class="form-control" id="codepostal" required>
+
+            <div class="mb-3">
                 <label for="profil" class="form-label">Profil:</label>
                 <!-- Sélectionner le type de profil (Client ou Admin) -->
                 <select name="profil" class="form-control" id="profil" required>
@@ -73,7 +77,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
     // Vérifier si le formulaire a été soumis
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Préparer la requête d'insertion dans la table utilisateur
-        $insertStmt = $connexion->prepare("INSERT INTO utilisateur (mel, motdepasse, nom, prenom, adresse, ville, profil) VALUES (:mel, :motdepasse, :nom, :prenom, :adresse, :ville, :profil)");
+        $insertStmt = $connexion->prepare("INSERT INTO utilisateur (mel, motdepasse, nom, prenom, adresse, ville, codepostal, profil) VALUES (:mel, :motdepasse, :nom, :prenom, :adresse, :ville, :codepostal, :profil)");
         
         // Récupérer les valeurs du formulaire
         $mel = $_POST['mel'];
@@ -82,6 +86,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
         $prenom = $_POST['prenom'];
         $adresse = $_POST['adresse'];
         $ville = $_POST['ville'];
+        $codepostal = $_POST['codepostal'];
         $profil = $_POST['profil'];
         
         // Lier les paramètres à la requête préparée
@@ -91,6 +96,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
         $insertStmt->bindValue(':prenom', $prenom);
         $insertStmt->bindValue(':adresse', $adresse);
         $insertStmt->bindValue(':ville', $ville);
+        $insertStmt->bindValue(':codepostal', $codepostal);
         $insertStmt->bindValue(':profil', $profil);
         
         // Exécuter la requête et afficher un message de confirmation

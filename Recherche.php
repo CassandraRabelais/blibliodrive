@@ -8,7 +8,7 @@
 	<title>Résultats de recherche</title>
 </head>
 <body>
-
+	
 	<?php
 		session_start();
 		require_once 'navbar.php';
@@ -24,7 +24,7 @@
 					require_once 'connexion.php';
 					$livres = [];
 					$searchQuery = '';
-
+					
 					if (isset($_GET['author']) && trim($_GET['author']) !== '') {
 						$searchQuery = trim($_GET['author']);
 						$sql = "SELECT DISTINCT l.nolivre, l.titre, l.photo, a.nom, a.prenom FROM livre l 
@@ -45,7 +45,7 @@
 
 				<?php if (!empty($searchQuery)): ?>
 					<h2 class="mb-3">Résultats de recherche pour "<?php echo htmlspecialchars($searchQuery); ?>"</h2>
-
+					
 					<?php if (!empty($livres)): ?>
 						<ul class="list-group">
 							<?php foreach ($livres as $livre): ?>
@@ -65,7 +65,7 @@
 							Aucun livre trouvé pour l'auteur "<?php echo htmlspecialchars($searchQuery); ?>".
 						</div>
 					<?php endif; ?>
-					<?php else: ?>
+				<?php else: ?>
 						<div class="alert alert-secondary" role="alert">
 							Veuillez saisir le nom d'un auteur dans la barre de recherche pour afficher les résultats.
 					</div>
@@ -80,3 +80,4 @@
 	</div>
 
 </body>
+</html>

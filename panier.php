@@ -102,8 +102,7 @@
                     <?php endif; ?>
                 <?php endif; ?>
             </div>
-            <?php include 'formulaire.php'; ?>
--            
+            <?php include 'formulaire.php'; ?>  
         </div>
     </div>
 
