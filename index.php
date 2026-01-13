@@ -30,7 +30,7 @@ require_once 'navbar.php';
 				<div class="carousel-inner">
 					<?php foreach ($livres as $index => $livre): ?>
 					<div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
-						<img src="covers/<?php echo htmlspecialchars($livre['photo']); ?>" class="d-block w-100" alt="<?php echo htmlspecialchars($livre['titre']); ?>" style="max-height: 500px; object-fit: contain;">
+						<img src="covers/<?php echo ($livre['photo']); ?>" class="d-block w-100" alt="<?php echo ($livre['titre']); ?>" style="max-height: 500px; object-fit: contain;">
 					</div>
 					<?php endforeach; ?>
 				</div>

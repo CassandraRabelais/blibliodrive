@@ -71,7 +71,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
     // Vérifier si le formulaire a été soumis
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Préparer la requête d'insertion dans la table utilisateur
-        $insertStmt = $connexion->prepare("INSERT INTO utilisateur (mel, motdepasse, nom, prenom, adresse, ville, codepostal, profil) VALUES (:mel, :motdepasse, :nom, :prenom, :adresse, :ville, :codepostal, :profil)");
+        $insertStmt = $connexion->prepare("INSERT INTO utilisateur (mel, motdepasse, nom, prenom, adresse, ville, codepostal, profil) VALUES (:mel, MD5(:motdepasse), :nom, :prenom, :adresse, :ville, :codepostal, :profil)");
         
         // Récupérer les valeurs du formulaire
         $mel = $_POST['mel'];

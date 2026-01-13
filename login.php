@@ -16,7 +16,7 @@
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        $stmt = $connexion->prepare("SELECT * FROM utilisateur WHERE mel = ? AND motdepasse = ?");
+        $stmt = $connexion->prepare("SELECT * FROM utilisateur WHERE mel = ? AND motdepasse = MD5(?)");
         $stmt->execute([$email, $password]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 

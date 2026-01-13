@@ -19,9 +19,9 @@
     // Bouton retirer du panier 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove'])) {
         $nolivre = (int) $_POST['nolivre'];
-        if (($key = array_search($nolivre, $_SESSION['cart'])) !== false) {
+        if (($key = array_search($nolivre, $_SESSION['cart'])) !== false) { // Trouve l’index d’une valeur dans un tableau
             unset($_SESSION['cart'][$key]);
-            $_SESSION['cart'] = array_values($_SESSION['cart']); // index
+            $_SESSION['cart'] = array_values($_SESSION['cart']); // Réindexe le tableau proprement
         }
     }
 
@@ -84,7 +84,7 @@
                     <ul class="list-group">
                         <?php foreach ($cartBooks as $book): ?>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <?php echo htmlspecialchars($book['titre']); ?>
+                                <?php echo ($book['titre']); ?>
                                 <form method="post" style="display: inline;">
                                     <input type="hidden" name="nolivre" value="<?php echo $book['nolivre']; ?>">
                                     <button type="submit" name="remove" class="btn btn-danger btn-sm">Retirer</button>

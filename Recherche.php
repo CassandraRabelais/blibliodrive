@@ -27,32 +27,34 @@
 					
 					//Pour afficher les livres de tels ou tels auteur juste avec le nom ou prénom ou les 2
 					if (isset($_GET['author']) && trim($_GET['author']) !== '') {
-						$searchQuery = trim($_GET['author']);
-						$sql = "SELECT DISTINCT l.nolivre, l.titre, l.photo, a.nom, a.prenom FROM livre l 
-								JOIN auteur a ON l.noauteur = a.noauteur 
-								WHERE LOWER(a.nom) LIKE LOWER(:s) 
-								OR LOWER(a.prenom) LIKE LOWER(:s) 
-								OR LOWER(CONCAT(a.prenom, ' ', a.nom)) LIKE LOWER(:s) 
-								OR LOWER(CONCAT(a.nom, ' ', a.prenom)) LIKE LOWER(:s)
-								ORDER BY l.dateajout DESC";
-						$stmt = $connexion->prepare($sql);
-						$param = '%'.$searchQuery.'%';
-						$stmt->bindParam(':s', $param, PDO::PARAM_STR);
-						$stmt->execute();
-						$livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
-					}
-				?>
+    				$searchQuery = trim($_GET['author']);
+
+   					$sql = "SELECT l.nolivre, l.titre, a.nom, a.prenom
+            				FROM livre l
+            				INNER JOIN auteur a ON l.noauteur = a.noauteur
+            				WHERE a.nom LIKE :author
+               				OR a.prenom LIKE :author
+            				ORDER BY l.dateajout DESC";
+
+    				$stmt = $connexion->prepare($sql);
+    				$param = '%' . $searchQuery . '%';
+					$stmt->bindValue(':author', $param, PDO::PARAM_STR);
+					$stmt->execute();
+
+    				$livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}				?>
+
 
 				<?php if (!empty($searchQuery)): ?>
-					<h2 class="mb-3">Résultats de recherche pour "<?php echo htmlspecialchars($searchQuery); ?>"</h2>
+					<h2 class="mb-3">Résultats de recherche pour "<?php echo ($searchQuery); ?>"</h2>
 					
 					<?php if (!empty($livres)): ?>
 						<ul class="list-group">
 							<?php foreach ($livres as $livre): ?>
 								<li class="list-group-item d-flex justify-content-between align-items-center">
-									<a href="détails.php?nolivre=<?php echo htmlspecialchars($livre['nolivre'] ?? ''); ?>&author=<?php echo urlencode($searchQuery); ?>" class="text-decoration-none"><?php echo htmlspecialchars($livre['titre']); ?></a>
+									<a href="détails.php?nolivre=<?php echo ($livre['nolivre'] ?? ''); ?>&author=<?php echo ($searchQuery); ?>" class="text-decoration-none"><?php echo ($livre['titre']); ?></a>
 									<?php if (isset($_SESSION['user'])): ?>
-<!--emmène vers la page détail-->			<form method="post" action="détails.php?nolivre=<?php echo htmlspecialchars($livre['nolivre'] ?? ''); ?>&author=<?php echo urlencode($searchQuery); ?>" style="display: inline;">
+<!--emmène vers la page détail-->			<form method="post" action="détails.php?nolivre=<?php echo ($livre['nolivre'] ?? ''); ?>&author=<?php echo ($searchQuery); ?>" style="display: inline;">
 											<input type="hidden" name="add_to_cart" value="1">
 											<button type="submit" class="btn btn-sm btn-primary">Ajouter au panier</button>
 										</form>
@@ -62,7 +64,7 @@
 						</ul>
 					<?php else: ?>
 						<div class="alert alert-warning" role="alert">
-							Aucun livre trouvé pour l'auteur "<?php echo htmlspecialchars($searchQuery); ?>".
+							Aucun livre trouvé pour l'auteur "<?php echo ($searchQuery); ?>".
 						</div>
 					<?php endif; ?>
 				<?php else: ?>
