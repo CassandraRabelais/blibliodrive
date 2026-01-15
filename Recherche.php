@@ -25,7 +25,7 @@
 					$livres = [];
 					$searchQuery = '';
 					
-					//Pour afficher les livres de tels ou tels auteur juste avec le nom ou prénom ou les 2
+					//Pour afficher les livres de tels ou tels auteur juste avec le nom ou prénom
 					if (isset($_GET['author']) && trim($_GET['author']) !== '') {
     				$searchQuery = trim($_GET['author']);
 

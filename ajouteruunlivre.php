@@ -5,7 +5,7 @@ require_once 'connexion.php';
 // Vérifier que l'utilisateur est connecté ET qu'il est admin
 if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
     // Si pas admin, rediriger vers la page de connexion
-    header("Location: login.php");
+    header("Location: index.php");
     exit;
 }
 

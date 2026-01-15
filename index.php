@@ -22,7 +22,7 @@ require_once 'navbar.php';
 				require_once 'connexion.php';
 				$stmt = $connexion->prepare("SELECT titre, photo FROM livre ORDER BY dateajout DESC LIMIT 3");
 				$stmt->execute();
-				$livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
+				$livres = $stmt->fetchAll(PDO::FETCH_ASSOC); // à remplacer 
 			?>
 			<!--Pour afficher le carrousel de façon dynamique-->
 			<h2 class="mb-3">Dernières acquisitions</h2>
