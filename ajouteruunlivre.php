@@ -89,10 +89,8 @@ $stmt->execute();
         // Exécuter la requête et afficher un message
         if ($insertStmt->execute()) {
             $nb_ligne_affectees = $insertStmt->rowCount();
-            $dernier_numero = $connexion->lastInsertId(); // Récupérer le dernier ID auto-généré
             echo "<div class='alert alert-success mt-3'>";
             echo $nb_ligne_affectees . " livre(s) ajouté(s) avec succès.<br>";
-            echo "Dernier numéro de livre généré : " . $dernier_numero;
             echo "</div>";
         } else {
             echo "<div class='alert alert-danger mt-3'>Erreur lors de l'ajout du livre.</div>";
