@@ -34,7 +34,7 @@ $stmt->execute();
                 <!-- Liste déroulante des auteurs -->
                 <select name="noauteur" class="form-control" id="noauteur" required>
                     <?php while ($auteur = $stmt->fetch(PDO::FETCH_OBJ)): ?>
-                        <option value="<?= $auteur->noauteur ?>"><?= $auteur->prenom . ' ' . $auteur->nom ?></option>
+                        <option value="<?= $auteur->noauteur ?>"><?= $auteur->prenom . ' ' . $auteur->nom ?></option> <!-- Afficher prénom et nom de l'auteur -->
                     <?php endwhile; ?>
                 </select>
             </div>
@@ -66,15 +66,15 @@ $stmt->execute();
 
     <?php
     // Vérifier si le formulaire a été soumis
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!empty($_POST)) {
         // Préparer la requête d'insertion dans la table livre
         $insertStmt = $connexion->prepare("INSERT INTO livre (noauteur, titre, isbn13, anneeparution, detail, photo, dateajout) VALUES (:noauteur, :titre, :isbn13, :anneeparution, :detail, :photo, CURDATE())");
         
         // Récupérer les valeurs du formulaire
-        $noauteur = (int) $_POST['noauteur'];
+        $noauteur = $_POST['noauteur'];
         $titre = $_POST['titre'];
         $isbn13 = $_POST['isbn13'];
-        $anneeparution = (int) $_POST['anneeparution'];
+        $anneeparution = $_POST['anneeparution'];
         $detail = $_POST['detail'];
         $photo = $_POST['photo'];
         

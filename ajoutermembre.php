@@ -68,8 +68,8 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
         </form>
     </div>
     <?php
-    // Vérifier si le formulaire a été soumis
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Vérifier si le formulaire a été soumis
+        if (!empty($_POST)) {
         // Préparer la requête d'insertion dans la table utilisateur
         $insertStmt = $connexion->prepare("INSERT INTO utilisateur (mel, motdepasse, nom, prenom, adresse, ville, codepostal, profil) VALUES (:mel, MD5(:motdepasse), :nom, :prenom, :adresse, :ville, :codepostal, :profil)");
         
@@ -84,7 +84,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
         $profil = $_POST['profil'];
         
         // Lier les paramètres à la requête préparée
-        $insertStmt->bindValue(':mel', $mel);
+        $insertStmt->bindValue(':mel', $mel); 
         $insertStmt->bindValue(':motdepasse', $motdepasse);
         $insertStmt->bindValue(':nom', $nom);
         $insertStmt->bindValue(':prenom', $prenom);

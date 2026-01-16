@@ -55,7 +55,7 @@
 									<a href="détails.php?nolivre=<?php echo ($livre->nolivre ?? ''); ?>&author=<?php echo ($searchQuery); ?>" class="text-decoration-none"><?php echo ($livre->titre); ?></a>
 									<?php if (isset($_SESSION['user'])): ?>
 <!--emmène vers la page détail-->			<form method="post" action="détails.php?nolivre=<?php echo ($livre->nolivre ?? ''); ?>&author=<?php echo ($searchQuery); ?>" style="display: inline;">
-											<input type="hidden" name="add_to_cart" value="1">
+											<input type="hidden" name="ajouter_au_panier" value="1">
 											<button type="submit" class="btn btn-sm btn-primary">Ajouter au panier</button>
 										</form>
 									<?php endif; ?>

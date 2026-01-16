@@ -12,7 +12,7 @@
     session_start();
     require_once 'connexion.php';
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if (!empty($_POST)) {
         $email = $_POST['email'];
         $password = $_POST['password'];
 

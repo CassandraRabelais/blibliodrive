@@ -14,7 +14,7 @@
     $message = '';
 
     // Vérifier si le formulaire a été soumis
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		if (!empty($_POST)) {
         // Récupérer les données du formulaire
         $mel = $_POST['mel'];
         $motdepasse = $_POST['motdepasse'];

@@ -12,8 +12,8 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
+if (!isset($_SESSION['panier'])) {
+    $_SESSION['panier'] = [];
 }
 
 require_once 'navbar.php';
@@ -22,39 +22,40 @@ require_once 'connexion.php';
 $message = '';
 
 /*Retirer un livre du panier*/
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove'])) {
-    $nolivre = (int) $_POST['nolivre'];
-    if (($key = array_search($nolivre, $_SESSION['cart'])) !== false) {
-        unset($_SESSION['cart'][$key]);
-        $_SESSION['cart'] = array_values($_SESSION['cart']);
+    if (isset($_POST['remove'])) {
+    $nolivre = $_POST['nolivre'];
+    if (($key = array_search($nolivre, $_SESSION['panier'])) !== false) { // Trouve la clé du livre à retirer
+        unset($_SESSION['panier'][$key]);
+        $_SESSION['panier'] = array_values($_SESSION['panier']); // Réindexe le tableau
+        $message = '<div class="alert alert-danger">Livre retiré du panier.</div>';
     }
 }
 
 /*Emprunter tous les livres*/
 if (
-    $_SERVER['REQUEST_METHOD'] === 'POST'
+    !empty($_POST)
     && isset($_POST['borrow_all'])
     && isset($_SESSION['user'])
-    && !empty($_SESSION['cart'])
+    && !empty($_SESSION['panier'])
 ) {
     $userEmail = $_SESSION['user']['mel'];
 
     $success = true;
 
-    foreach ($_SESSION['cart'] as $nolivre) {
+    foreach ($_SESSION['panier'] as $nolivre) {
 
         // Vérifie si le livre est déjà emprunté
         $checkSql = "SELECT 1 FROM emprunter 
                      WHERE mel = :mel 
                      AND nolivre = :nolivre 
                      AND dateretour IS NULL";
-        $checkStmt = $connexion->prepare($checkSql);
+        $checkStmt = $connexion->prepare($checkSql); // Prépare la requête
         $checkStmt->execute([
             ':mel' => $userEmail,
             ':nolivre' => $nolivre
         ]);
 
-        if ($checkStmt->rowCount() == 0) {
+        if ($checkStmt->rowCount() == 0) { // Le livre n'est pas encore emprunté
             // Emprunt
             $borrowSql = "INSERT INTO emprunter (mel, nolivre, dateemprunt)
                           VALUES (:mel, :nolivre, CURDATE())";
@@ -64,7 +65,7 @@ if (
                 ':mel' => $userEmail,
                 ':nolivre' => $nolivre
             ])) {
-                $success = false;
+                $success = false; // Marque comme échec si l'insertion échoue
             }
         }
     }
@@ -75,21 +76,21 @@ if (
                     </div>';
     }
 
-    $_SESSION['cart'] = []; // Vider le panier
+    $_SESSION['panier'] = []; // Vider le panier
 }
 
 /*Récupérer les livres du panier*/
-$cartBooks = [];
+$carnets = [];
 
-if (!empty($_SESSION['cart'])) {
-    $placeholders = str_repeat('?,', count($_SESSION['cart']) - 1) . '?';
+if (!empty($_SESSION['panier'])) {
+    $placeholders = str_repeat('?,', count($_SESSION['panier']) - 1) . '?'; //
     $sql = "SELECT l.nolivre, l.titre, l.photo, a.nom, a.prenom
             FROM livre l
             JOIN auteur a ON l.noauteur = a.noauteur
             WHERE l.nolivre IN ($placeholders)";
     $stmt = $connexion->prepare($sql);
-    $stmt->execute($_SESSION['cart']);
-    $cartBooks = $stmt->fetchAll(PDO::FETCH_OBJ);
+    $stmt->execute($_SESSION['panier']);
+    $carnets = $stmt->fetchAll(PDO::FETCH_OBJ);
 }
 ?>
 
@@ -100,11 +101,11 @@ if (!empty($_SESSION['cart'])) {
 
             <?php echo $message; ?>
 
-            <?php if (empty($cartBooks)): ?>
+            <?php if (empty($carnets)): ?>
                 <p>Votre panier est vide.</p>
             <?php else: ?>
                 <ul class="list-group">
-                    <?php foreach ($cartBooks as $book): ?>
+                    <?php foreach ($carnets as $book): ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <?php echo $book->titre; ?>
                             <form method="post" style="display:inline;">

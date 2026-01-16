@@ -24,7 +24,7 @@
 					$searchQuery = isset($_GET['author']);
 					// sélectionne les livres de l'auteur demandé
 					if (isset($_GET['nolivre'])) {
-						$nolivre = (int) $_GET['nolivre'];
+						$nolivre = $_GET['nolivre'];
 						$sql = "SELECT l.titre, l.photo, l.isbn13, l.anneeparution, l.detail, l.dateajout, a.nom, a.prenom 
 								FROM livre l 
 								JOIN auteur a ON l.noauteur = a.noauteur 
@@ -32,17 +32,17 @@
 						$stmt = $connexion->prepare($sql);
 						$stmt->bindParam(':nolivre', $nolivre, PDO::PARAM_INT);
 						$stmt->execute();
-						$livre = $stmt->fetch(PDO::FETCH_OBJ);
+						$livre = $stmt->fetch(PDO::FETCH_OBJ); // Récupère le livre en tant qu'objet
 					}
 
 					// Pour ajouter au panier 
-					if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart']) && isset($_SESSION['user'])) {
-						if (!isset($_SESSION['cart'])) {
-							$_SESSION['cart'] = [];
+						if (isset($_POST['ajouter_au_panier']) && isset($_SESSION['user'])) { // Ajouter au panier seulement si connecté
+						if (!isset($_SESSION['panier'])) {
+							$_SESSION['panier'] = [];
 						}
-						if (!in_array($nolivre, $_SESSION['cart'])) {
-							if (count($_SESSION['cart']) < 5) {
-								$_SESSION['cart'][] = $nolivre;
+						if (!in_array($nolivre, $_SESSION['panier'])) { // Vérifie si le livre n'est pas déjà dans le panier
+							if (count($_SESSION['panier']) < 5) {
+								$_SESSION['panier'][] = $nolivre;
 								$message = '<div class="alert alert-success">Livre ajouté au panier.</div>';
 							} else {
 								$message = '<div class="alert alert-danger">Panier plein. Limite de 5 livres atteinte.</div>';
@@ -66,7 +66,7 @@
 							<p><strong>Année de parution :</strong> <?php echo ($livre->anneeparution); ?></p>
 							<p><strong>Date d'ajout :</strong> <?php echo ($livre->dateajout); ?></p>
 							<h5>Description :</h5>
-							<p><?php echo nl2br(($livre->detail)); ?></p>
+							<p><?php echo (($livre->detail)); ?></p>
 							<?php echo $message; ?>
 							<p class="disponible" >Disponible</p>
 							<?php if (!isset($_SESSION['user'])): ?>
@@ -74,7 +74,7 @@
 							<?php endif; ?>
 							<?php if (isset($_SESSION['user'])): ?>
 								<form method="post" style="display: inline;">
-									<button type="submit" name="add_to_cart" class="btn btn-primary">Ajouter au panier</button>
+									<button type="submit" name="ajouter_au_panier" class="btn btn-primary">Ajouter au panier</button>
 								</form>
 							<?php endif; ?>
 							<a href="Recherche.php<?php echo !empty($searchQuery) ? '?author=' . ($searchQuery) : ''; ?>" class="btn btn-secondary">Retour à la recherche</a>

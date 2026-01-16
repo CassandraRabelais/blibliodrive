@@ -12,7 +12,7 @@
     session_start();
     require_once 'connexion.php';
 
-    if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') {
+    if (!isset($_SESSION['user']) || $_SESSION['user']['profil'] != 'admin') { // Vérifier que l'utilisateur est admin
         header("Location: login.php");
         exit;
     }
